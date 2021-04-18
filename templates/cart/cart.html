@@ -1,0 +1,159 @@
+{% extends 'base/base.html' %}
+{% load static %}
+<head>
+    {% block title %}
+    <title>Cart | E-Shopper</title>
+	{% endblock %}
+</head><!--/head-->
+
+<body>
+	{% block content %}
+	<section id="cart_items">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="{% url 'home:index' %}">Home</a></li>
+				  <li class="active">Shopping Cart</li>
+				</ol>
+			</div>
+			{% if carts %}
+			<div class="table-responsive cart_info">
+				<table class="table table-condensed">
+					<thead>
+						<tr class="cart_menu">
+							<td class="srno">SrNo</td>
+							<td class="image">Image</td>
+							<td class="description">Item</td>
+							<td class="price">Price</td>
+							<td class="quantity">Quantity</td>
+							<td class="total">Total</td>
+							<td>Remove</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for item in carts %}
+						<tr>
+							<td class="serial_number">
+								<h4>{{forloop.counter}}</h4>
+							</td>
+							<td class="cart_product">
+								<a href=""><img src="{{item.product.main_image.url}}" alt="" style="width:100px"></a>
+							</td>
+							<td class="cart_description">
+								<h4><a href="">{{item.product.title}}</a></h4>
+								<p>{{item.product.prod_id}}</p>
+							</td>
+							<td class="cart_price">
+								<p>{{item.product.sell_price}}</p>
+							</td>
+							<td class="cart_quantity">
+								<div class="cart_quantity_button">
+									
+									<a href="{% url 'cart:qtyInc' item.id %}" class="cart_quantity_up" > + </a>
+									<form action="{% url 'cart:qty' item.id %}" method="POST">
+										{% csrf_token %}
+										<input class="cart_quantity_input" type="text" name="quantity" value="{{item.quantity}}" autocomplete="off" size="2">
+									</form>
+									<a class="cart_quantity_down" href="{% url 'cart:qtyDec' item.id %}"> - </a>
+								</div>
+							</td>
+							<td class="cart_total">
+								<p class="cart_total_price">{{item.totalprod_price}}</p>
+							</td>
+							<td class="cart_delete">
+								<form action="{% url 'cart:deleteItem' item.id %}" method='post'>
+									{% csrf_token  %}
+									<button class="cart_quantity_delete"><i class="fa fa-times"></i></button>
+								</form>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section> <!--/#cart_items-->
+
+	<section id="do_action">
+		<div class="container">
+			<div class="heading">
+				<h3>What would you like to do next?</h3>
+				<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="chose_area">
+						<ul class="user_option">
+							<li>
+								<input type="checkbox">
+								<label>Use Coupon Code</label>
+							</li>
+							<li>
+								<input type="checkbox">
+								<label>Use Gift Voucher</label>
+							</li>
+							<li>
+								<input type="checkbox">
+								<label>Estimate Shipping & Taxes</label>
+							</li>
+						</ul>
+						<ul class="user_info">
+							<li class="single_field">
+								<label>Country:</label>
+								<select>
+									<option>United States</option>
+									<option>Bangladesh</option>
+									<option>UK</option>
+									<option>India</option>
+									<option>Pakistan</option>
+									<option>Ucrane</option>
+									<option>Canada</option>
+									<option>Dubai</option>
+								</select>
+								
+							</li>
+							<li class="single_field">
+								<label>Region / State:</label>
+								<select>
+									<option>Select</option>
+									<option>Dhaka</option>
+									<option>London</option>
+									<option>Dillih</option>
+									<option>Lahore</option>
+									<option>Alaska</option>
+									<option>Canada</option>
+									<option>Dubai</option>
+								</select>
+							
+							</li>
+							<li class="single_field zip-field">
+								<label>Zip Code:</label>
+								<input type="text">
+							</li>
+						</ul>
+						<a class="btn btn-default update" href="">Get Quotes</a>
+						<a class="btn btn-default check_out" href="">Continue</a>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="total_area">
+						<ul>
+							<li>Cart Sub Total <span>{{sub_total_price}}</span></li>
+							<li>Shipping Cost <span>{% if shipping_charge == 0 %}Free{% else %}{{shipping_charge}}{% endif %}</span></li>
+							<li>Total <span>{{tprice}}</span></li>
+						</ul>
+							<a class="btn btn-default update" href="">Update</a>
+							<a class="btn btn-default check_out" href="">Check Out</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% else %}
+		<div class="col-md-6 col-md-offset-3 mb-3">
+			<h4>Looks like your cart is empty. Add some items to display.</h4><br>
+			<img src="{% static 'images/cart/empty-cart.svg' %}" width="70%">
+		</div><br>
+	</section><!--/#do_action-->
+	{% endif %}
+{% endblock %}
+</body>

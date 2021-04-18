@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+<head>
+    {% block title %}
+    <title>Shop | E-Shopper</title>
+	{% endblock %}
+</head><!--/head-->
+
+<body>
+	{% block content %}
+	<section>
+		<div class="container">
+			<div class="row">
+				{% include 'common/sidebar.html' %}
+				
+				<div class="col-sm-9">
+					<div class="wish_list"><!--Wish List-->
+						<h2 class="title text-center">My Wish List</h2>
+						{% for product in products %}
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-6 col-md-3">
+									  <a href="{% url 'home:productDetails' product.item.slug product.item.prod_id %}" class="thumbnail">
+										<img src="{{product.item.main_image.url}}" alt="product-img">
+									  </a>
+									</div>
+									<div class="col-xs-6 col-md-9">
+										<div class="wishlist-prod-details">
+											<h4>{{product.item.sub_category.sub_category}}</h4>
+											<h4>{{product.item.title}}</h4>
+											<p>PRODUCT ID: {{product.item.prod_id}}</p>
+											<h3>INR {{product.item.sell_price}}</h3>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+    {% endblock %}
+</body>
+</html>
