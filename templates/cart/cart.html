@@ -27,13 +27,13 @@
 							<td class="price">Price</td>
 							<td class="quantity">Quantity</td>
 							<td class="total">Total</td>
-							<td>Remove</td>
+							<td class="remove">Remove</td>
 						</tr>
 					</thead>
 					<tbody>
 						{% for item in carts %}
 						<tr>
-							<td class="serial_number">
+							<td class="serial_number text-center">
 								<h4>{{forloop.counter}}</h4>
 							</td>
 							<td class="cart_product">
@@ -47,15 +47,14 @@
 								<p>{{item.product.sell_price}}</p>
 							</td>
 							<td class="cart_quantity">
-								<div class="cart_quantity_button">
-									
-									<a href="{% url 'cart:qtyInc' item.id %}" class="cart_quantity_up" > + </a>
-									<form action="{% url 'cart:qty' item.id %}" method="POST">
+								<span class="cart_quantity_button">
+									<a class="cart_quantity_down" href="{% url 'cart:qtyDec' item.id %}"> - </a>
+									<form class="form-inline" action="{% url 'cart:qty' item.id %}" method="POST">
 										{% csrf_token %}
 										<input class="cart_quantity_input" type="text" name="quantity" value="{{item.quantity}}" autocomplete="off" size="2">
 									</form>
-									<a class="cart_quantity_down" href="{% url 'cart:qtyDec' item.id %}"> - </a>
-								</div>
+									<a href="{% url 'cart:qtyInc' item.id %}" class="cart_quantity_up" > + </a>
+								</span>
 							</td>
 							<td class="cart_total">
 								<p class="cart_total_price">{{item.totalprod_price}}</p>

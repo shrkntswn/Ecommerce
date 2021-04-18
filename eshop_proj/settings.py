@@ -51,6 +51,7 @@ LOCAL_APPS = [
     'accounts',
     'contact',
     'wishlist',
+    'feedback',
 ]
 
 THIRD_PARTY_APPS = [
