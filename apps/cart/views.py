@@ -17,10 +17,14 @@ def cart(request):
     context = {'carts':carts, 'sub_total_price': sub_total_price(),'tprice':sub_total_price()+shipping_charge, 'shipping_charge':shipping_charge}
     return render(request, 'cart/cart.html', context)
 
-def addtocart(request, id):
-    product = Product.objects.get(id=id)
+def addtocart(request, prod_id, id):
+    product = Product.objects.get(prod_id=prod_id, id=id)
+    carts = Cart.objects.filter(user=request.user).order_by('-id')
     if request.method == 'POST':
-        cart = Cart.objects.create(user=request.user, product=product)
+        if product.prod_id not in [_.product.prod_id for _ in carts]:
+            cart = Cart.objects.create(user=request.user, product=product)
+        else:
+            return redirect('cart:qtyInc', prod_id, id)
     return redirect('cart:cart')
 
 def deleteItemCart(request, id):
@@ -30,8 +34,11 @@ def deleteItemCart(request, id):
         cart.delete()
     return redirect('cart:cart')
 
-def qtyInc(request, id):
-    cart = get_object_or_404(Cart, id=id, user=request.user)
+def qtyInc(request, prod_id, id):
+    print(prod_id)
+    cart = get_object_or_404(Cart, product__prod_id=prod_id, product__id=id, user=request.user)
+    print(cart)
+    print(id)
     cart.quantity += 1
     cart.save()
     return redirect('cart:cart')

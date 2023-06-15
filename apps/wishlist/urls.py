@@ -3,5 +3,5 @@ from . import views
 
 app_name = 'eshop_proj'
 urlpatterns = [
-    path('wishlist/', views.wishlist, name="wishlist")
+    path('wishlist/', views.addtowishlist, name="wishlist")
 ]

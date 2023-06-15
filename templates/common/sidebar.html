@@ -42,8 +42,8 @@
             <div class="well text-center">
                 <form action="" method="POST">
                     {% csrf_token %}
-                    <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="{{max_value}}" data-slider-step="5" data-slider-value="[0,{{max_value}}]" id="sl2" name='slider'><br />
-                    <b class="pull-left">0</b> <b class="pull-right">{{max_value}}</b><br>
+                    <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="{{max_value}}" data-slider-step="5" data-slider-value="[{{selected_value_min}},{{selected_value_max}}]" id="sl2" name='slider'><br />
+                    <b class="pull-left">{{selected_value_min}}</b> <b class="pull-right">{{selected_value_max}}</b><br>
                     <button type="submit">Filter</button>
                 </form>
                  

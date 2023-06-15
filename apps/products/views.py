@@ -41,14 +41,22 @@ def shop(request, id):
     sub_cat_obj = get_object_or_404(SubCategory, id=id)
     products = Product.objects.filter(sub_category__id = id)
     try:
-        max_value = int(max([product.sell_price for product in products]))
+        max_value = 10**int(len(str(int(max([product.sell_price for product in products])))))
     except:
-        max_value = None
+        max_value = 0
+    selected_value_min=0
+    selected_value_max=max_value
     if request.method == "POST":
-        slider = request.POST.get('slider')
-        slider_list = [x for x in slider.split(',')]
-        products = Product.objects.filter(sub_category__id = id, sell_price__range = (slider_list[0], slider_list[1]))
-       
+        try:
+            slider = request.POST.get('slider')
+            slider_list = [x for x in slider.split(',')]
+            selected_value_min=slider_list[0]
+            selected_value_max=slider_list[1]
+            products = Product.objects.filter(sub_category__id = id, sell_price__range = (slider_list[0], slider_list[1]))
+        except:
+            products = Product.objects.filter(sub_category__id = id)
+
+    print('slider',selected_value_min)   
     items = sub_cat_obj.product_set.all()
     brands_list =[]
     price_slider = True
@@ -64,6 +72,6 @@ def shop(request, id):
     except EmptyPage:
         pg = paginator.page(paginator.num_pages)
     products_after_pagiation = pg
-    context = {'max_value':max_value, 'price_slider':price_slider, 'categories':categories, 'brands':brands, 'sub_cat_obj':sub_cat_obj, 'products':products_after_pagiation, 'page':pg}
+    context = {'max_value':max_value, 'price_slider':price_slider, 'categories':categories, 'brands':brands, 'sub_cat_obj':sub_cat_obj, 'products':products_after_pagiation, 'page':pg, 'selected_value_min':selected_value_min, 'selected_value_max':selected_value_max}
     return render(request, 'products/shop.html', context)
 
